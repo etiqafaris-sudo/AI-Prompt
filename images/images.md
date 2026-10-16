@@ -95,3 +95,6 @@ Do not change the subject into a different person.
 Maintain realistic facial structure, hairstyle, glasses, and skin tone.
 Photo-realistic, natural skin texture, realistic hands, clean anatomy, sharp facial features, premium lighting, professional photography quality.
 Create a high-end personal branding portrait of the subject against a dark studio background with subtle blue or purple rim lighting. He is wearing a formal suit and looking confidently at the camera. The style should feel cinematic, bold, premium, and modern. Use strong contrast, sharp details, and realistic skin tone. The final image should communicate a luxury business-branding aesthetic.
+
+## Naik Taraf Gambar Jadi Lebih Cinematic
+Give my photo a premium cinematic photography treatment. Preserve my exact identity, face, body, proportions, clothing, and natural appearance. Improve lighting direction, shadows, contrast, color grading, depth, atmosphere, and composition while keeping everything physically believable. Make it look like a professionally shot cinematic portrait rather than an AI-generated image.
