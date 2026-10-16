@@ -1,0 +1,29 @@
+# Gemini / ChatGPT
+
+## 1/ Editing Plan Generator
+Prompt:
+"Act as a professional video editor. Analyze my raw footage and create a timestamped editing plan optimized for viewer retention. Specify cuts, pacing, B-roll, transitions, music, sound effects, text overlays, and emotional beats. Explain why each edit matters and organize everything into a table with these columns: Timestamp | Editing Action | Visuals | Audio | Editor Notes. Footage: [Paste description]"
+
+## 2/ Video Style Replication
+Prompt:
+"Analyze my reference video and break down its editing pace, shot durations, transitions, color grading, camera movement, sound design, text, and visual rhythm. Identify what makes the style effective, then create a practical editing blueprint for my video using similar techniques without copying the original content. Include specific recommendations for shots, transitions, audio, and pacing. Reference video: [Upload]. My concept: [Describe]"
+
+## 3/ Watch-Time Optimization
+Prompt:
+"Act as a video retention editor. Analyze my script for weak hooks, slow sections, repetitive lines, and unnecessary explanations. Strengthen the opening 10 seconds and tighten sections that risk losing attention without changing the core message. Specify where to use jump cuts, zooms, animated subtitles, B-roll, pattern interrupts, and sound effects. Explain the purpose of each change. Audience: [Target audience]. Script: [Paste script]"
+
+## 4/ Platform-Specific Export Settings
+Prompt:
+"Act as a professional post-production editor. Recommend export settings tailored to my platform and video type. Specify resolution, frame rate, codec, bitrate, audio format, and color profile. Account for platform compression and explain how to preserve visual and audio quality without unnecessarily increasing file size. Provide a recommended export preset and any essential alternatives. Platform: [Platform]. Video type: [Type]. Source footage: [Resolution and frame rate]"
+
+## 5/ Raw Footage Cleanup System
+Prompt:
+"Act as a professional footage editor. Review my raw footage and classify each section as GOLD (keep), TRIM (remove mistakes, pauses, repetition, and irrelevant content), or POLISH (improve with B-roll, subtitles, sound design, or visual effects). Provide timestamps, recommended actions, and reasons for every decision. Then suggest the strongest sequence for turning the footage into a clear, engaging final video. Footage: [Upload video]"
+
+## 6/ Final Pre-Publish Review
+Prompt:
+"Act as a senior video editor conducting a final quality review. Evaluate my video for pacing, story flow, audio clarity, visual quality, color grading, transitions, and watchability. Score each category out of 10 and identify specific problems with timestamps where possible. Rank the three highest-impact improvements, explaining exactly what to change and why. Prioritize issues that materially affect the viewer experience. Video: [Upload video]"
+
+## 7/ Retention Drop-Off Detector
+Prompt:
+"Act as a video retention analyst. Identify timestamps or script sections where viewers may lose interest, explain the likely causes, and recommend specific fixes involving tighter cuts, stronger hooks, B-roll, pattern interrupts, or pacing changes. If analytics are available, distinguish actual audience drop-offs from predictions. Finally, create three alternative opening hooks using curiosity, a surprising claim, and a clear outcome. Video/script: [Upload or paste]. Audience: [Target audience]"
