@@ -1,0 +1,20 @@
+---
+description: Mandatory secure coding and privacy guardrails across all stacks
+alwaysApply: true
+---
+# Security and privacy guardrails
+
+- Use threat modeling proportionate to risk. For externally reachable or sensitive features, consider OWASP Top 10, ASVS, and applicable organizational controls.
+- Enforce authorization at every server-side operation and resource boundary; UI hiding is not authorization. Check object-level access and tenant ownership for every ID supplied by a caller.
+- Apply least privilege to application identities, database users, cloud roles, service accounts, and CI tokens.
+- Validate input using allowlists, size/range limits, canonicalization where appropriate, and domain invariants. Encode output for its destination; do not rely on validation alone to prevent injection.
+- Use parameterized SQL and safe ORM APIs. Dynamic identifiers/order clauses must be selected from fixed allowlists, never concatenated from caller input.
+- Protect browser sessions and tokens: secure cookies, HttpOnly where applicable, appropriate SameSite, TLS, short lifetimes, rotation/revocation strategy, and CSRF protection when cookie-authenticated state-changing requests are used.
+- Configure CORS narrowly to known origins. CORS is not authentication. Never use wildcard origins with credentials.
+- Use platform cryptography and established libraries; no custom crypto. Verify TLS certificates normally. Store secrets in an approved secret store or environment-specific secret mechanism, not source control.
+- Apply safe error handling: generic external errors, detailed internal diagnostics without secrets or sensitive data. Do not expose stack traces in production.
+- Rate-limit and bound expensive operations; set request/body/file limits, timeouts, pagination limits, and concurrency limits where appropriate.
+- Uploads: allowlist extensions and content types, inspect actual content where practical, randomize storage names, store outside web root, limit size, scan where required, and prevent path traversal.
+- Logs must exclude credentials, access tokens, session identifiers, payment data, and unnecessary personal/sensitive data. Sanitize untrusted log fields to prevent log injection.
+- Add negative security tests for access denied, cross-tenant access, invalid input, replay/idempotency, and abuse limits where relevant.
+- Do not create or run exploit payloads against systems without explicit authorization. DAST/penetration tests must target an agreed, non-production scope with rate and data-safety limits.

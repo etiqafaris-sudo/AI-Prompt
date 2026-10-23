@@ -1,0 +1,22 @@
+---
+description: Next.js App Router, React, TypeScript, server/client boundary, and web security standards
+globs: **/*.tsx,**/*.ts,**/*.jsx,**/*.js,**/next.config.*,**/middleware.*
+alwaysApply: false
+---
+# Next.js standards
+
+- Confirm Next.js version and App Router versus Pages Router before changing routing or data fetching.
+- Prefer Server Components by default; use `'use client'` only for interactivity/browser APIs. Keep client bundles small.
+- Treat Server Actions, Route Handlers, and API endpoints as public attack surfaces: authenticate, authorize, validate, rate-limit, and return safe errors inside each operation.
+- Never rely on middleware or layout checks alone for authorization. Verify ownership/tenant access at the data-access boundary.
+- Keep secrets and privileged SDKs server-only. Never prefix secrets with `NEXT_PUBLIC_`; anything public-prefixed is exposed to the browser.
+- Validate environment variables at startup/build with a schema. Do not leak server config through props, logs, error messages, or serialized data.
+- Use TypeScript strict mode and runtime validation for untrusted inputs (forms, query params, cookies, external APIs). Types alone do not validate runtime data.
+- Avoid `dangerouslySetInnerHTML`; if unavoidable, sanitize with a vetted sanitizer and document the trust boundary.
+- Use framework-supported CSRF-safe authentication patterns. Cookie-authenticated state-changing operations need CSRF consideration; validate origins where appropriate.
+- Configure CSP, secure headers, cookie attributes, and narrow CORS at the correct edge/server layer. Avoid permissive wildcard CORS with credentials.
+- Prevent open redirects: allowlist destinations. Encode/validate URL inputs and avoid SSRF by restricting outbound URL schemes, hosts, and private network targets.
+- Fetching: set caching/revalidation intentionally; never cache user-specific or tenant-specific data in a shared cache unless the key and isolation are proven safe.
+- Avoid N+1 server fetches, unbounded data loads, and accidental secret-bearing serialization. Use pagination and explicit DTOs.
+- Provide accessible forms, semantic HTML, keyboard navigation, labels, loading/error/empty states, and robust error boundaries.
+- Run lint, typecheck, tests, and production build. Keep lockfiles committed and use the chosen package manager consistently.

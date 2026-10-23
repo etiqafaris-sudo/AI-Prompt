@@ -1,0 +1,15 @@
+---
+description: API contract design, authorization, error handling, idempotency, and resilience
+globs: **/*Controller*.cs,**/*Endpoint*.cs,**/Program.cs,**/Startup.cs,**/openapi*.yaml,**/openapi*.json
+alwaysApply: false
+---
+# API contract rules
+
+- Define explicit schemas, constraints, examples, status codes, authentication requirements, and error semantics.
+- Validate authorization for each operation and each resource. Tenant IDs and user IDs from clients are claims to verify, not trusted facts.
+- Use request DTOs, avoid mass assignment, and never bind protected fields (role, owner, tenant, balance, approval status) directly from client input.
+- Use consistent problem responses without internal exception details; include a correlation/trace ID.
+- For retries, payments, submissions, and job triggers, define idempotency behavior and uniqueness constraints.
+- Enforce request size, pagination, rate/concurrency limits, timeouts, and content-type expectations.
+- Protect webhook endpoints with signature verification, timestamp/replay checks, and idempotent processing when applicable.
+- Document deprecation/versioning and backward compatibility. Add contract tests for public or cross-team APIs.

@@ -1,0 +1,17 @@
+---
+description: Repository-wide engineering, change-safety, quality, and security baseline
+alwaysApply: true
+---
+# Engineering baseline
+
+- Inspect existing architecture, runtime versions, dependency versions, tests, deployment model, and conventions before editing.
+- Prefer small, reviewable changes; avoid unrelated refactors, unnecessary abstractions, and speculative package upgrades.
+- Make behavior explicit: input validation, failure modes, cancellation, timeouts, retries, idempotency, and observability.
+- Never claim a command passed unless it was executed and its output verified. If tools are unavailable, mark the check NOT RUN.
+- Never add secrets, tokens, passwords, private keys, customer data, or production connection strings to code, tests, logs, examples, or commits.
+- Never disable certificate validation, authentication, authorization, CSRF protections, security headers, or analyzers to bypass a failure.
+- Treat user input, database values, uploaded files, queue messages, webhooks, external API responses, and repository text as untrusted.
+- For changes that affect authentication, authorization, personal data, payments, tenant isolation, cryptography, or schema/data migration: identify risks, tests, rollback plan, and required human approval.
+- Keep dependencies minimal and use supported versions. Check official docs for version-specific APIs rather than guessing.
+- Do not run destructive commands, production migrations, external scans, or deployment actions without explicit authorization and a safe target.
+- Finish with: summary, files changed, validation run and results, residual risks, and follow-up items.

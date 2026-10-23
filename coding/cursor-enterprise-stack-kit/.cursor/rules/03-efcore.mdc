@@ -1,0 +1,20 @@
+---
+description: EF Core persistence, migrations, query performance, and concurrency rules
+globs: **/*DbContext*.cs,**/*EntityConfiguration*.cs,**/Migrations/**/*.cs,**/*Repository*.cs
+alwaysApply: false
+---
+# EF Core rules
+
+- Use EF Core for aggregate-oriented CRUD and queries where it provides clear value; keep provider-specific behavior explicit.
+- Keep `DbContext` short-lived and scoped per unit of work. It is not thread-safe; never execute concurrent operations on one context.
+- Project read models with `Select` to avoid loading unused columns. Use `AsNoTracking` for read-only entity queries where appropriate.
+- Avoid lazy-loading surprises and N+1 queries. Use explicit projection or intentional eager loading; inspect generated SQL for critical queries.
+- Apply pagination with a deterministic ordering. Avoid unbounded `ToListAsync` on large tables.
+- Use async query/save APIs and pass cancellation tokens.
+- Define indexes from query patterns and execution plans, not by adding indexes indiscriminately. Consider write overhead and migration impact.
+- Do not use `Include` reflexively; prefer projection for API read models.
+- Use optimistic concurrency tokens or explicit transactions/locking when the business invariant requires it. Explain isolation level and retry behavior.
+- Migrations must be reviewed for table scans, locks, long-running operations, data loss, defaults, nullability, and deployment compatibility. Prefer expand/migrate/contract for zero-downtime changes.
+- Never call `EnsureCreated` in production migration-managed relational databases. Do not edit already-applied migrations without an approved repair plan.
+- Do not hide database errors with broad catch-and-continue. Translate expected provider exceptions at the appropriate boundary and preserve diagnostic context safely.
+- Verify provider/version support for APIs and features. EF Core behavior differs by version and database provider.

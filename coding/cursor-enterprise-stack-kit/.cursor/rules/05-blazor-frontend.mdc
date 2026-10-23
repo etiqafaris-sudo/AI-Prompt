@@ -1,0 +1,21 @@
+---
+description: Blazor UI, component, state, accessibility, and security standards
+globs: **/*.razor,**/*Blazor*.cs,**/*Component*.razor,**/*_Imports.razor
+alwaysApply: false
+---
+# Blazor standards
+
+- Determine Blazor Server, WebAssembly, or Blazor Web App render mode before designing state, auth, storage, or service lifetimes.
+- Treat all browser/client state as untrusted. Enforce authorization in server-side services/endpoints; `[Authorize]` on a component is not a substitute for resource-level checks.
+- In Interactive Server, do not store per-user state in singleton services. Use correct scoped/circuit-safe lifetimes and avoid cross-circuit data leakage.
+- Never put secrets, privileged credentials, internal connection strings, or confidential business rules in WebAssembly/client bundles.
+- Use `AuthorizeView` for presentation only; secure the underlying data operation independently.
+- Use `EditForm` and validation appropriately, but revalidate domain rules on the server. Do not trust client validation.
+- Avoid blocking calls (`.Result`, `.Wait()`, `Thread.Sleep`) on UI/event paths. Use async event handlers and cancellation when appropriate.
+- Keep components focused. Extract reusable UI and application services when complexity warrants it; do not create abstractions for trivial markup.
+- Handle loading, empty, error, and retry states. Avoid duplicate event submissions and stale async updates.
+- Use `IDisposable`/`IAsyncDisposable` for subscriptions, timers, and JS interop resources. Unsubscribe from events to prevent leaks.
+- Use JS interop only when necessary, validate data crossing the boundary, and avoid unsafe DOM injection or raw HTML from untrusted sources.
+- Accessibility: semantic HTML, keyboard support, visible focus, labels, validation messages, contrast, and appropriate ARIA only when needed.
+- Do not persist bearer tokens in localStorage by default. Prefer the framework's recommended authentication flow for the selected hosting model.
+- Add component tests for critical states and authorization integration tests for protected operations.

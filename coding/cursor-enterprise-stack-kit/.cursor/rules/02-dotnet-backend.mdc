@@ -1,0 +1,21 @@
+---
+description: .NET backend architecture, API, reliability, performance, and maintainability rules
+globs: **/*.cs,**/*.csproj,**/*.sln,**/*.slnx,**/appsettings*.json,**/web.config
+alwaysApply: false
+---
+# .NET backend standards
+
+- Confirm target framework and hosting model before using APIs. Do not assume modern .NET APIs exist in .NET Framework.
+- Follow the existing architecture. For new services, prefer clear boundaries (API/Presentation, Application, Domain, Infrastructure) without creating layers that add no value.
+- Keep controllers/endpoints thin. Put use-case orchestration in application handlers/services; keep domain invariants in domain logic.
+- Use asynchronous I/O end-to-end for network/database operations; accept and pass `CancellationToken` where supported. Do not wrap synchronous I/O in `Task.Run`.
+- Use DI with appropriate lifetimes. Never capture scoped services in singletons; avoid service locator patterns.
+- Use typed options and startup validation for configuration. Fail fast on missing mandatory settings without printing secrets.
+- API contracts: explicit request/response DTOs, stable status codes, validation, pagination, correlation IDs, consistent problem details, and versioning strategy where needed. Never bind persistence entities directly from untrusted request bodies.
+- Use `IHttpClientFactory` in modern .NET; for .NET Framework follow compatible lifetime/handler guidance and avoid creating/discarding clients per request. Set explicit timeouts and safe retry policy.
+- Retries only for transient failures and idempotent operations; bound attempts and total time, add jitter, honor `Retry-After`, and avoid retry storms. Never blindly retry non-idempotent writes.
+- Use structured logging and metrics. Do not log secrets, full auth headers, or unrestricted request/response bodies.
+- Avoid static mutable state for request/user/tenant data. Propagate identity and tenant context explicitly and safely.
+- Keep business rules independent of HTTP, database, and UI frameworks where practical. Do not expose EF entities as public API contracts.
+- Add unit tests for business rules and integration tests for persistence/auth/API boundaries. Do not mock every dependency if a real database integration test is feasible.
+- Performance: measure before optimizing; use bounded concurrency, streaming for large payloads, pagination, indexes based on query plans, and avoid N+1 queries.
