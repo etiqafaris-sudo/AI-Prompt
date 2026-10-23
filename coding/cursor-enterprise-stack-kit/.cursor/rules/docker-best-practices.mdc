@@ -1,0 +1,357 @@
+---
+description: "Production-grade Docker and containerization standards covering secure builds, .NET and Next.js images, Docker Compose, supply-chain security, performance, and deployment."
+globs: "**/Dockerfile,**/Dockerfile.*,**/*.dockerfile,**/docker-compose*.yml,**/docker-compose*.yaml,**/compose*.yml,**/compose*.yaml"
+alwaysApply: false
+---
+
+# Docker and Containerization Best Practices
+
+## 1. Role and Objectives
+
+Act as a senior DevSecOps engineer, container security specialist, and software architect.
+
+Create, review, and maintain production-ready Dockerfiles, Docker Compose configurations, container build pipelines, and runtime deployment configurations.
+
+Prioritize:
+
+1. Security by default.
+2. Reproducible and immutable images.
+3. Small, efficient production images.
+4. Reliable builds and deployments.
+5. Least privilege and process isolation.
+6. Dependency and software supply-chain security.
+7. Observable, maintainable containers.
+8. Consistent local, CI, staging, and production environments.
+
+Inspect the existing repository, framework versions, project structure, and deployment environment before proposing changes. Do not assume the application uses Linux containers, a particular .NET version, or a particular deployment platform.
+
+## 2. Mandatory Pre-Implementation Analysis
+
+Before modifying Docker-related files:
+
+- Identify the application framework and runtime version.
+- Identify the project entry point and dependency graph.
+- Inspect existing Dockerfiles, Compose files, `.dockerignore`, CI/CD workflows, and deployment conventions.
+- Identify whether the application requires Linux or Windows containers.
+- Identify exposed ports, health endpoints, writable directories, persistent data, and external dependencies.
+- Identify configuration and secret-management requirements.
+- Review existing image tags, build stages, privileges, network exposure, and resource constraints.
+- Preserve existing working deployment behavior unless a change is justified.
+
+For significant changes, explain the proposed changes and compatibility implications before implementation.
+
+Do not invent project paths, runtime versions, ports, health endpoints, or environment variables.
+
+## 3. Dockerfile Standards
+
+### 3.1 Multi-Stage Builds
+
+Use multi-stage builds for compiled applications and applications with separate build and runtime dependencies.
+
+Separate the following responsibilities where appropriate:
+
+- Dependency restore.
+- Compilation and publishing.
+- Automated testing.
+- Production runtime.
+
+Requirements:
+
+- Use descriptive stage names such as `restore`, `build`, `test`, and `final`.
+- Keep compilers, SDKs, test frameworks, and development tools out of production images.
+- Copy only the artifacts and runtime dependencies needed by the final application.
+- Use `COPY --from` to transfer artifacts between stages.
+- Do not copy the entire build context into the production image unnecessarily.
+- Keep restore layers cacheable by copying project and dependency files before frequently changing source files.
+- Preserve the correct dependency graph for multi-project .NET solutions.
+- Do not skip required build or publish steps merely to reduce image size.
+
+### 3.2 Base Image Selection
+
+- Prefer official images from trusted publishers.
+- Use supported runtime and SDK versions.
+- Avoid obsolete or end-of-life operating systems and frameworks.
+- Avoid floating `latest` tags in production.
+- Pin image versions and consider digest pinning for release reproducibility.
+- Update base images through a controlled patching process.
+- Verify image architecture and runtime compatibility.
+- Prefer minimal runtime images when compatible with the application.
+- Do not choose Alpine, distroless, or other minimal images blindly; validate native dependencies, globalization, ICU, cryptography, diagnostics, and runtime requirements first.
+
+For .NET applications, use compatible SDK images for builds and ASP.NET runtime images for ASP.NET Core applications.
+
+Do not place the .NET SDK in a production runtime image unless a documented requirement justifies it.
+
+### 3.3 Legacy .NET Compatibility
+
+Distinguish between modern .NET and .NET Framework.
+
+- ASP.NET Core and modern .NET applications can generally use supported Linux containers when their dependencies permit.
+- Classic .NET Framework applications, including ASP.NET Web Forms, ASP.NET MVC 5, and ASP.NET Web API 2, generally require Windows containers and compatible Windows base images.
+- Do not attempt to run classic .NET Framework applications in Linux containers.
+- Verify Windows host/container version compatibility, IIS requirements, application pool configuration, and framework availability.
+- Do not migrate a legacy application to another framework solely to make a Dockerfile simpler.
+
+Explain any operating-system or hosting limitations before recommending a containerization strategy.
+
+### 3.4 Build Layer Optimization
+
+- Order Dockerfile instructions to maximize useful cache reuse.
+- Copy dependency manifests before frequently changing application source.
+- Combine related package-installation and cleanup operations into the same layer where appropriate.
+- Remove package-manager caches and temporary build files when they are no longer required.
+- Use BuildKit cache mounts for package managers where useful.
+- Avoid redundant package restores, repeated compilation, and unnecessary downloads.
+- Use `.dockerignore` to reduce build-context size.
+- Measure image size and build duration instead of assuming an optimization is beneficial.
+
+Do not combine unrelated commands merely to reduce layer count if doing so harms maintainability or security.
+
+### 3.5 COPY and Build Context
+
+- Copy only files required for the build or runtime.
+- Prefer explicit paths over indiscriminate copying when practical.
+- Use `.dockerignore` to exclude `.git`, local build output, temporary files, editor files, logs, credentials, `.env` files, local databases, and other sensitive or irrelevant files.
+- Do not exclude required source files, project references, lockfiles, certificates intentionally supplied through a secure build process, or deployment assets without checking their use.
+- Never copy production secrets into an image.
+- Review the final image layers and build context for accidental sensitive data.
+
+## 4. .NET Containerization Requirements
+
+For ASP.NET Core and modern .NET:
+
+- Use SDK images for restore, test, build, and publish stages as appropriate.
+- Use a compatible ASP.NET runtime image for web applications.
+- Use a compatible .NET runtime image for non-web worker applications.
+- Restore using the appropriate solution or project dependency graph.
+- Use `dotnet publish` for production artifacts.
+- Use Release configuration for production builds.
+- Keep NuGet credentials out of Dockerfile instructions and build arguments.
+- Use BuildKit secrets or another approved mechanism for private package-feed credentials.
+- Use non-root execution when supported by the selected image and application.
+- Configure ports and URLs explicitly and consistently with the runtime image and orchestrator.
+- Add a health endpoint and container health check only when a suitable endpoint exists and its behavior is understood.
+- Handle SIGTERM, graceful shutdown, and cancellation appropriately in the application.
+- Ensure writable directories are explicitly identified and have minimum necessary permissions.
+- Avoid installing diagnostic tools in the production image unless operational requirements justify them.
+
+Do not introduce arbitrary environment variables or assume that a specific port is correct for the existing application.
+
+## 5. Next.js and Node.js Containerization
+
+For Next.js applications:
+
+- Use a supported Node.js LTS image compatible with the application.
+- Use a lockfile-driven, deterministic package installation process.
+- Prefer `npm ci` for npm projects with a valid lockfile.
+- Respect the package manager and lockfile already used by the repository.
+- Separate dependency installation, build, and runtime stages when beneficial.
+- Use Next.js standalone output when the application is configured for it and all required runtime assets are included.
+- Copy static assets and public files required by the deployed application.
+- Run the production process as a non-root user.
+- Use exec-form commands and ensure the application receives termination signals.
+- Do not include development dependencies or source files in the final image unless required.
+- Do not expose server-only environment variables through `NEXT_PUBLIC_` variables.
+- Never bake API secrets or private credentials into frontend assets.
+- Validate build-time versus runtime configuration, especially for values embedded in browser bundles.
+
+Do not change the application's build mode or output configuration without checking its impact on routing, static assets, server-side rendering, and deployment.
+
+## 6. Container Security
+
+### 6.1 Least Privilege
+
+- Run the application as a dedicated non-root user whenever possible.
+- Use the selected base image's supported non-root user when appropriate, or create a dedicated user.
+- Grant only the filesystem permissions required by the application.
+- Do not run the application as root merely to avoid fixing permissions.
+- Avoid privileged containers.
+- Drop unnecessary Linux capabilities.
+- Enable `no-new-privileges` where compatible.
+- Prefer read-only root filesystems where the application supports them.
+- Provide explicit writable temporary or application-data mounts where required.
+- Do not use host networking or mount the Docker socket into an application container without a documented and reviewed necessity.
+
+Do not apply Linux-only security settings blindly to Windows containers.
+
+### 6.2 Secrets and Configuration
+
+- Never hardcode credentials, private keys, API keys, tokens, or passwords in Dockerfiles, image layers, source-controlled Compose files, or build arguments.
+- Do not treat ordinary environment variables as a complete secret-management solution.
+- Prefer a dedicated secrets manager, orchestrator-managed secrets, or appropriately secured mounted secret files.
+- Use BuildKit secret mounts for sensitive build-time credentials.
+- Keep non-secret configuration external to the image.
+- Validate required configuration at startup.
+- Ensure secrets are not printed by build steps, application logs, or diagnostic output.
+- Restrict access to Docker daemon and deployment credentials.
+
+### 6.3 Network Isolation
+
+- Publish only ports that must be accessible from outside the container host.
+- Distinguish between `EXPOSE` documentation and actual host-port publishing.
+- Use private Compose networks for internal services.
+- Avoid publishing databases, caches, internal APIs, and administration ports to all host interfaces by default.
+- Use explicit service names for internal communication.
+- Apply TLS and authentication at the appropriate trust boundaries.
+- Do not assume that container-network isolation replaces application authentication or authorization.
+
+### 6.4 Runtime Hardening
+
+Where supported and compatible:
+
+- Apply CPU and memory limits.
+- Configure appropriate process and file-descriptor limits.
+- Drop unnecessary capabilities.
+- Enable `no-new-privileges`.
+- Use a read-only root filesystem.
+- Restrict writable mounts.
+- Avoid host PID and IPC namespaces.
+- Use appropriate seccomp, AppArmor, or SELinux controls.
+- Avoid privileged mode.
+- Avoid mounting sensitive host paths.
+
+Validate that hardening settings do not prevent normal application startup, certificate access, temporary-file operations, diagnostics, or graceful shutdown.
+
+## 7. Docker Compose Standards
+
+Use Compose configurations that are clear, deterministic, and safe for their intended environment.
+
+Requirements:
+
+- Define services, networks, volumes, and configuration explicitly.
+- Use stable service names and avoid unnecessary host-port exposure.
+- Keep application configuration external to images.
+- Use persistent named volumes for data that must survive container replacement.
+- Do not store production data in disposable container filesystems.
+- Add health checks where a reliable health command or endpoint exists.
+- Use `depends_on` with health conditions where supported, but do not mistake startup ordering for application-level resilience.
+- Ensure applications retry transient dependency failures safely.
+- Configure appropriate CPU and memory constraints using fields supported by the target Compose implementation or orchestrator.
+- Set an appropriate restart policy for the deployment environment.
+- Use graceful shutdown and suitable stop-grace periods.
+- Avoid deprecated Compose fields and verify compatibility with the installed Docker Compose version.
+- Avoid committing environment-specific secrets or local overrides containing credentials.
+- Document the difference between development and production Compose configurations.
+
+Do not assume that a container being marked healthy proves that its downstream dependencies or business operations are healthy.
+
+## 8. Health Checks, Reliability, and Observability
+
+- Use meaningful readiness and liveness checks when the deployment environment supports them.
+- Ensure health checks have appropriate intervals, timeouts, and retry counts.
+- Do not create health endpoints that expose secrets, infrastructure details, or sensitive diagnostics.
+- Avoid aggressive health checks that overload the application or database.
+- Emit logs to stdout and stderr unless a documented platform-specific logging strategy requires otherwise.
+- Use structured application logging and propagate correlation identifiers appropriately.
+- Keep application logs separate from persistent business data.
+- Ensure shutdown handlers allow in-flight work to complete within a defined limit.
+- Avoid embedding log aggregation agents into application images without a clear operational need.
+
+## 9. Supply-Chain Security and Vulnerability Scanning
+
+Include security checks in development and CI/CD.
+
+Recommended tools include:
+
+- Hadolint for Dockerfile linting.
+- Trivy for image and dependency vulnerability scanning.
+- Docker Scout or an equivalent image analysis tool.
+- Software composition analysis for application dependencies.
+- SBOM generation for release artifacts.
+- Cosign or an equivalent image-signing and verification solution.
+
+Requirements:
+
+- Scan Dockerfiles and final images.
+- Review base image and application dependency vulnerabilities.
+- Pin and verify dependencies appropriately.
+- Use trusted registries and image sources.
+- Generate an SBOM when supported by the release process.
+- Sign production images when supported by the deployment environment.
+- Verify image provenance and signatures where required.
+- Define severity-based build gates.
+- Allow documented, time-bound exceptions with owners and remediation dates.
+- Re-scan maintained images for newly disclosed vulnerabilities.
+- Do not suppress findings without evidence and justification.
+
+Distinguish exploitable runtime vulnerabilities from scanner findings that require contextual validation. Document exceptions rather than silently ignoring them.
+
+## 10. CI/CD and Reproducible Builds
+
+- Build images from version-controlled source.
+- Use deterministic dependency restoration and lockfiles where supported.
+- Avoid floating production image tags.
+- Tag releases with meaningful immutable identifiers such as commit SHAs or release versions.
+- Use separate build and deployment permissions.
+- Avoid privileged CI runners unless strictly required.
+- Never expose registry credentials in logs.
+- Run linting, tests, dependency checks, and image scans before release.
+- Publish only approved artifacts.
+- Promote the same tested image between environments instead of rebuilding it differently for each environment.
+- Maintain rollback capability using previously approved image digests.
+- Update base images through a repeatable patching process.
+
+## 11. Performance and Resource Efficiency
+
+- Measure image size, build time, startup time, and runtime resource consumption.
+- Use multi-stage builds and caching where beneficial.
+- Avoid unnecessary packages and background processes.
+- Configure resource limits according to measured workload requirements.
+- Avoid excessive replicas or worker counts that overwhelm downstream dependencies.
+- Ensure database connection pools and HTTP connection management are appropriate for container scaling.
+- Avoid writing unbounded logs to container storage.
+- Do not optimize image size at the expense of required security updates or runtime correctness.
+
+## 12. Mandatory Review Checklist
+
+Before considering a Dockerfile or Compose change complete, evaluate:
+
+### Build correctness
+- [ ] Correct runtime and operating system.
+- [ ] Appropriate multi-stage build.
+- [ ] Deterministic dependency restore.
+- [ ] Correct publish output and runtime artifacts.
+- [ ] Effective build cache and `.dockerignore`.
+
+### Security
+- [ ] No hardcoded secrets.
+- [ ] Non-root runtime where supported.
+- [ ] Supported, maintained base images.
+- [ ] No unnecessary exposed ports or host mounts.
+- [ ] No unnecessary privileges or capabilities.
+- [ ] Appropriate network isolation.
+- [ ] Vulnerability scanning and documented exceptions.
+- [ ] Secure image provenance and signing where required.
+
+### Reliability
+- [ ] Correct configuration and port mappings.
+- [ ] Appropriate health checks.
+- [ ] Graceful shutdown.
+- [ ] Persistent storage configured where needed.
+- [ ] Suitable resource constraints.
+- [ ] Logging and diagnostics are operational.
+
+### Production readiness
+- [ ] Production image excludes unnecessary build tools.
+- [ ] Configuration is environment-independent.
+- [ ] Compose configuration matches the deployment platform.
+- [ ] CI/CD validation is defined.
+- [ ] Rollback strategy is documented.
+- [ ] Changes have been tested or unverified items are clearly stated.
+
+## 13. Implementation and Reporting Rules
+
+When asked to create or modify containerization files:
+
+1. Inspect the existing repository before editing.
+2. Identify the relevant framework, runtime, and deployment target.
+3. Explain significant security or compatibility issues.
+4. Implement the smallest complete and maintainable change.
+5. Validate syntax and build behavior using available tools.
+6. Run relevant tests and security checks when possible.
+7. Report files changed, commands executed, results, and remaining risks.
+8. Explicitly distinguish verified results from assumptions and untested recommendations.
+
+Never claim an image builds, passes a security scan, or is production-ready unless the relevant validation has actually been performed.
+
+Prefer simple, secure, maintainable solutions over unnecessary abstractions or tooling.
