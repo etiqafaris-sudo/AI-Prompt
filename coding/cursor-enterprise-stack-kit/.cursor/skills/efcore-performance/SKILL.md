@@ -1,12 +1,13 @@
 ---
 name: efcore-performance
 description: Diagnose and improve EF Core query and persistence performance without sacrificing correctness or tenant isolation.
-paths:
-  - "**/*DbContext*.cs"
-  - "**/*Repository*.cs"
-  - "**/Migrations/**/*.cs"
+disable-model-invocation: true
 ---
 # EF Core performance workflow
+
+## When to use
+
+- DbContext, repositories, migrations, handlers, or other EF Core persistence paths.
 
 1. Identify provider/version, query frequency, cardinality, expected data volume, indexes, and observed latency. Ask for a query plan/metrics if needed.
 2. Reproduce with representative data; do not optimize solely by intuition.

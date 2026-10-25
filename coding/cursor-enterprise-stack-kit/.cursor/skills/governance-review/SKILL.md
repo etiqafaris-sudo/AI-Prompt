@@ -1,6 +1,7 @@
 ---
 name: governance-review
 description: Review a feature or release for engineering governance, traceability, change control, auditability, and compliance evidence.
+disable-model-invocation: true
 ---
 # Governance review workflow
 

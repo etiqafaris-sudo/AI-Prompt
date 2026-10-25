@@ -1,11 +1,13 @@
 ---
 name: blazor-feature
 description: Build a secure, accessible, maintainable Blazor feature for the repository's actual render mode and authentication architecture.
-paths:
-  - "**/*.razor"
-  - "**/*Blazor*.cs"
+disable-model-invocation: true
 ---
 # Blazor feature workflow
+
+## When to use
+
+- Blazor UI work (`.razor`, Blazor-related `.cs` files).
 
 1. Identify Blazor Server, WebAssembly, or Blazor Web App render mode; inspect auth, DI lifetimes, component library, routing, and test setup.
 2. Define user journeys, roles/resource permissions, loading/empty/error states, validation, accessibility, and mobile behavior.

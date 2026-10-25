@@ -1,0 +1,90 @@
+# ASP.NET Core Performance Reference
+
+## Response Compression
+
+Official reference:
+https://learn.microsoft.com/aspnet/core/performance/response-compression
+
+### Implementation checklist
+
+- Confirm the target ASP.NET Core version.
+- Check whether IIS, Nginx, YARP, or a CDN already handles compression.
+- Add the built-in Microsoft.AspNetCore.ResponseCompression middleware
+  when application-level compression is appropriate.
+- Configure Brotli and Gzip.
+- Register the middleware before response-producing middleware.
+- Test JSON and other supported textual content types.
+- Verify that the client sends Accept-Encoding.
+- Verify Content-Encoding on eligible responses.
+- Measure uncompressed and compressed response sizes.
+- Benchmark CPU, throughput, and latency.
+
+### Minimal API example
+
+For a modern ASP.NET Core application:
+
+```csharp
+using System.IO.Compression;
+using Microsoft.AspNetCore.ResponseCompression;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddResponseCompression(options =>
+{
+    // Leave disabled unless HTTPS compression has been
+    // explicitly assessed and approved for this application.
+    options.EnableForHttps = false;
+
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+});
+
+builder.Services.Configure<BrotliCompressionProviderOptions>(
+    options => options.Level = CompressionLevel.Fastest);
+
+builder.Services.Configure<GzipCompressionProviderOptions>(
+    options => options.Level = CompressionLevel.Fastest);
+
+var app = builder.Build();
+
+// Register early in the middleware pipeline.
+app.UseResponseCompression();
+
+app.MapGet("/api/performance-check", () => new
+{
+    Status = "OK",
+    Message = "Compression test",
+    Timestamp = DateTimeOffset.UtcNow
+});
+
+app.Run();
+```
+
+### Important production notes
+
+1. HTTPS compression is disabled in this example deliberately.
+   Assess BREACH-style risks before enabling it.
+2. If IIS or a reverse proxy already compresses responses, prefer
+   evaluating that configuration before adding application middleware.
+3. Do not expect compression to improve database query time or CPU-bound
+   application logic.
+4. Test using realistic response sizes and concurrent requests.
+5. Do not compress images, ZIP archives, or other already-compressed
+   formats unnecessarily.
+
+### Validation
+
+Send a request with:
+
+Accept-Encoding: br, gzip
+
+Check the response for:
+
+- Content-Encoding: br or gzip, when compression is applied.
+- The expected Content-Type.
+- Correct response content after decompression.
+- Appropriate Vary: Accept-Encoding behavior.
+- Reduced transferred bytes for eligible responses.
+
+Compare requests with and without compression. Record payload size,
+p95/p99 latency, throughput, and CPU usage.

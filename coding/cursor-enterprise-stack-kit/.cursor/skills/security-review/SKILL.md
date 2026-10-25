@@ -1,6 +1,7 @@
 ---
 name: security-review
 description: Perform a structured, evidence-based security review of code or a feature, prioritizing exploitable risks and safe remediation.
+disable-model-invocation: true
 ---
 # Security review workflow
 

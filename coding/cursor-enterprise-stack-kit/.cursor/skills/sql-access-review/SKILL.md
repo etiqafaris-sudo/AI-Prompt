@@ -1,12 +1,13 @@
 ---
 name: sql-access-review
 description: Review and implement safe Dapper or ADO.NET data access with provider-aware SQL, transaction handling, and concurrency controls.
-paths:
-  - "**/*Repository*.cs"
-  - "**/*Query*.cs"
-  - "**/*.sql"
+disable-model-invocation: true
 ---
 # SQL access workflow
+
+## When to use
+
+- Dapper/ADO.NET repositories, query classes, or `.sql` scripts.
 
 1. Confirm database engine/provider and supported driver/version; do not transfer syntax or locking hints between engines.
 2. Define query purpose, expected row count, latency target, indexes, transaction boundary, and concurrency invariant.

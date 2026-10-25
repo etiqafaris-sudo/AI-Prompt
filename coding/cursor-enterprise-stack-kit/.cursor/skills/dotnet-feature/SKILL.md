@@ -1,11 +1,13 @@
 ---
 name: dotnet-feature
 description: Design and implement a production-quality .NET backend feature with architecture, security, persistence, tests, observability, and rollout checks.
-paths:
-  - "**/*.cs"
-  - "**/*.csproj"
+disable-model-invocation: true
 ---
 # .NET feature workflow
+
+## When to use
+
+- New or changed .NET backend features (`.cs`, `.csproj`, APIs, handlers, persistence).
 
 1. Inspect target framework, solution structure, dependency versions, architecture, DI registration, auth policies, database provider, and test conventions.
 2. Write acceptance criteria and identify input/output contracts, authorization, tenant ownership, data classification, concurrency, idempotency, and failure modes.

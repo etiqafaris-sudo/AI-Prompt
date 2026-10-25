@@ -1,6 +1,7 @@
 ---
 name: architecture-decision
 description: Compare architectural options and write an evidence-based Architecture Decision Record before consequential design changes.
+disable-model-invocation: true
 ---
 # Architecture decision workflow
 
