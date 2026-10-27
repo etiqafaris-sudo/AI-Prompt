@@ -1,0 +1,35 @@
+---
+description: DotNetCustomerSupportAI RAG demo — stack, layers, and where full guidance lives
+alwaysApply: true
+---
+# Project context (DotNetCustomerSupportAI)
+
+This repository is **Contoso Support Demo**: a .NET 10 learning project for **RAG** customer support (dummy data only).
+
+## Stack (authoritative detail in root `AGENTS.md`)
+
+- **Web:** Blazor WebAssembly, typed HttpClient API clients, chat + KB + diagnostics UI.
+- **Api:** ASP.NET Core Web API, OpenAPI, health checks, validation, structured errors.
+- **Application:** use cases, chat/RAG orchestration, retrieval workflows.
+- **Domain:** entities and support-domain rules (no outward dependencies).
+- **Infrastructure:** Semantic Kernel, Ollama (local) / optional hosted LLM, **PostgreSQL + pgvector**, EF Core, Npgsql, seed/index pipeline.
+- **Data:** versioned JSON under `data/`; fictional users, articles, tickets only.
+- **Local infra:** Docker Compose (PostgreSQL/pgvector, optional Ollama). Secrets in env (see `.env.example`), never in Blazor client or git.
+
+## Architecture constraints
+
+- Dependencies point **inward**; Blazor talks to backend **only via HTTP APIs**.
+- LLM, embeddings, and vector search run **on the backend**; no provider credentials in WASM.
+- RAG answers must use **real retrieved citations**; no fabricated article IDs or policies.
+- Do not wire real billing, account admin, or production customer systems.
+
+## Agent workflow
+
+1. Read root **`AGENTS.md`** for phase, sample data, RAG pipelines, and acceptance criteria before material changes.
+2. Prefer **`docs/architecture.md`** and related guides under `docs/` for design context.
+3. Use project rules by topic: `@02-dotnet-backend`, `@05-blazor-frontend`, `@09-api-contracts`, `@03-efcore`, `@04-dapper-adonet-sql`, `@07-testing-and-quality`.
+4. Invoke **`@11-security-review`** or **`@10-docker-best-practices`** only for those tasks (large manual rules).
+
+## Solution layout (target)
+
+`src/` → Web, Api, Application, Domain, Infrastructure; `tests/` → Unit + Integration; `data/` → knowledge-base, tickets, seed.

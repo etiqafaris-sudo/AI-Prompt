@@ -1,6 +1,5 @@
 ---
-description: Blazor UI, component, state, accessibility, and security standards
-globs: **/*.razor,**/*Blazor*.cs,**/*Component*.razor,**/*_Imports.razor
+description: Apply when working on Blazor WebAssembly UI, Razor components, WASM client services, chat/KB pages, or DotNetCustomerSupportAI.Web.
 alwaysApply: false
 ---
 # Blazor standards

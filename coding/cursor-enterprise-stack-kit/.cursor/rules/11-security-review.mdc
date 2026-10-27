@@ -1,9 +1,9 @@
 ---
-description: "Security review standards for .NET, ASP.NET Web API, EF Core, Dapper, ADO.NET, Blazor, Next.js, APIs, dependencies, secrets, and cross-file data flows."
 alwaysApply: true
 ---
-
 # Security Review Rules
+
+Invoke manually with `@11-security-review` (not included in every chat).
 
 Act as a senior application security engineer and secure code reviewer.
 

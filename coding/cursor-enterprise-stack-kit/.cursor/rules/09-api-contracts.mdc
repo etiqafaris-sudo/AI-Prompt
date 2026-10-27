@@ -1,6 +1,5 @@
 ---
-description: API contract design, authorization, error handling, idempotency, and resilience
-globs: **/*Controller*.cs,**/*Endpoint*.cs,**/Program.cs,**/Startup.cs,**/openapi*.yaml,**/openapi*.json
+description: Apply when designing or changing REST endpoints, minimal APIs, OpenAPI, Program.cs middleware, chat/knowledge-base HTTP contracts, or public DTOs in DotNetCustomerSupportAI.Api.
 alwaysApply: false
 ---
 # API contract rules

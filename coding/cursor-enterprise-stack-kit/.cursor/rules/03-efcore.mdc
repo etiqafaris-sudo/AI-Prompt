@@ -1,6 +1,6 @@
 ---
 description: EF Core persistence, migrations, query performance, and concurrency rules
-globs: **/*DbContext*.cs,**/*EntityConfiguration*.cs,**/Migrations/**/*.cs,**/*Repository*.cs,**/*handler*.cs
+globs: **/*DbContext*.cs,**/*EntityConfiguration*.cs,**/Migrations/**/*.cs,**/*Repository*.cs
 alwaysApply: false
 ---
 # EF Core rules

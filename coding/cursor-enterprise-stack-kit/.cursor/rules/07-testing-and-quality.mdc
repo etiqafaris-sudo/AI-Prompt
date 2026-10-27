@@ -1,6 +1,6 @@
 ---
 description: Testing strategy, quality gates, and reproducible verification
-globs: **/*Tests.cs,**/*.test.*,**/*.spec.*,**/package.json,**/*.csproj,**/*.yml,**/*.yaml
+globs: **/*Tests.cs,**/*Tests/**/*.cs,**/*.test.*,**/*.spec.*,**/DotNetCustomerSupportAI.*Tests/**/*.cs,**/.github/workflows/**/*
 alwaysApply: false
 ---
 # Quality gates

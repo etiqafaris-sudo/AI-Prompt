@@ -1,10 +1,9 @@
 ---
-description: "Production-grade Docker and containerization standards covering secure builds, .NET and Next.js images, Docker Compose, supply-chain security, performance, and deployment."
-globs: "**/Dockerfile,**/Dockerfile.*,**/*.dockerfile,**/docker-compose*.yml,**/docker-compose*.yaml,**/compose*.yml,**/compose*.yaml"
 alwaysApply: false
 ---
-
 # Docker and Containerization Best Practices
+
+Invoke manually with `@10-docker-best-practices` (not included in every chat).
 
 ## 1. Role and Objectives
 

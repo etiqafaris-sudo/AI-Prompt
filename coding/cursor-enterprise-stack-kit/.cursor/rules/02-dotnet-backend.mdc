@@ -1,6 +1,5 @@
 ---
-description: .NET backend architecture, API, reliability, performance, and maintainability rules
-globs: **/*.cs,**/*.csproj,**/*.sln,**/*.slnx,**/appsettings*.json,**/web.config
+description: Apply when writing or changing C# backend code, csproj/sln, appsettings, ASP.NET Core Web API, Semantic Kernel integration, DI, or DotNetCustomerSupportAI Application/Domain/Infrastructure layers.
 alwaysApply: false
 ---
 # .NET backend standards
