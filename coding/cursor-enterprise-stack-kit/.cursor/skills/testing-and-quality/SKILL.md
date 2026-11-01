@@ -1,0 +1,16 @@
+---
+name: testing-and-quality
+description: Apply testing strategy, quality gates, and reproducible verification. Use when adding tests, fixing defects, or checking .NET, Next.js, or Blazor quality gates.
+---
+# Quality gates
+
+- Test behavior and risk, not implementation details. Include happy path, boundary, invalid input, authorization denial, and failure cases.
+- Unit tests cover pure business logic. Integration tests cover database/provider behavior, authentication/authorization, serialization, and external boundaries with controlled dependencies.
+- Add regression tests for every fixed defect where practical.
+- For concurrent or financial/stateful operations, test duplicate requests, race conditions, idempotency, and transaction boundaries.
+- Keep tests deterministic; do not depend on public internet or shared mutable production data.
+- Never weaken/remove a failing test simply to make a build green. Explain if a test is invalid and replace it with a meaningful one.
+- .NET baseline: build, test, format/analyzer checks, and dependency vulnerability review using commands appropriate to the repository.
+- Next.js baseline: package-manager install in frozen/lockfile mode, lint, typecheck, unit/component tests, and production build.
+- Blazor baseline: build, unit/component tests where configured, auth integration tests, and accessibility checks for critical flows.
+- Record exact commands, exit codes, and relevant failures. If not run, say so.

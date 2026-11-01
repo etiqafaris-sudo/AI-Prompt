@@ -1,7 +1,6 @@
 ---
 name: dotnet-feature
-description: Design and implement a production-quality .NET backend feature with architecture, security, persistence, tests, observability, and rollout checks.
-disable-model-invocation: true
+description: Design and implement a production-quality .NET backend feature with architecture, security, persistence, tests, observability, and rollout checks. Use when adding or changing .NET APIs, handlers, services, or persistence.
 ---
 # .NET feature workflow
 

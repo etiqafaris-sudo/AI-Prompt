@@ -1,7 +1,6 @@
 ---
 name: efcore-performance
-description: Diagnose and improve EF Core query and persistence performance without sacrificing correctness or tenant isolation.
-disable-model-invocation: true
+description: Diagnose and improve EF Core query and persistence performance without sacrificing correctness or tenant isolation. Use when tuning DbContext queries, repositories, migrations, or slow EF Core paths.
 ---
 # EF Core performance workflow
 

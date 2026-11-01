@@ -1,7 +1,6 @@
 ---
 name: architecture-decision
-description: Compare architectural options and write an evidence-based Architecture Decision Record before consequential design changes.
-disable-model-invocation: true
+description: Compare architectural options and write an evidence-based Architecture Decision Record before consequential design changes. Use when choosing an architecture, writing an ADR, or before a design change that affects security, data, cost, availability, or maintainability.
 ---
 # Architecture decision workflow
 

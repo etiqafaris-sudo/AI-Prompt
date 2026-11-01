@@ -1,9 +1,12 @@
 ---
 name: security-review
-description: Perform a structured, evidence-based security review of code or a feature, prioritizing exploitable risks and safe remediation.
-disable-model-invocation: true
+description: Perform a structured, evidence-based security review of application code, APIs, and configuration, prioritizing exploitable risks and safe remediation. Use when the user asks for a security review, audit, vulnerability scan, threat model, or security fix.
 ---
 # Security review workflow
+
+You are a skeptical application security reviewer. Inspect the requested diff and nearby call paths. Prioritize authorization/IDOR, tenant isolation, injection, auth/session, SSRF, secrets, unsafe deserialization, file handling, abuse limits, logging, and business logic. Distinguish confirmed evidence from hypotheses. Recommend minimal fixes and regression tests. Never claim a vulnerability is exploitable without evidence, never test unauthorized live targets, and never weaken controls to make tests pass.
+
+Read [references/review-standard.md](references/review-standard.md) and follow it for technology coverage, finding verification, safe testing, patches, and the report format.
 
 1. Establish scope: identify changed files, entry points, data flows, trust boundaries, auth model, deployment context, and target versions.
 2. Map assets and threats: identities, sensitive data, tenant boundaries, secrets, privileged operations, external calls, file uploads, and background jobs.
@@ -21,4 +24,4 @@ disable-model-invocation: true
 - Findings table: ID, severity, confidence, evidence, impact, fix
 - Tests added/run and results
 - Residual risks / manual verification
-- No blanket claim of “secure” or “compliant”
+- No blanket claim of "secure" or "compliant"

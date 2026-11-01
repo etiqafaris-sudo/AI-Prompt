@@ -1,13 +1,12 @@
 ---
 name: dotnet-performance-optimization
-description: Optimize ASP.NET Core and .NET backend performance with measurable baselines while preserving security, correctness, and tenant isolation.
-disable-model-invocation: true
+description: Optimize ASP.NET Core and .NET backend performance with measurable baselines while preserving security, correctness, and tenant isolation. Use when improving latency, throughput, caching, compression, allocations, or hosting performance.
 ---
 # .NET Performance Optimization
 
 ## When to use
 
-- ASP.NET Core APIs, services, or `.cs` / `.csproj` performance work in this repo.
+- ASP.NET Core APIs, services, or `.cs` / `.csproj` performance work.
 - See `references/aspnetcore-performance.md` for compression, caching, and hosting checklists.
 
 ## Role
