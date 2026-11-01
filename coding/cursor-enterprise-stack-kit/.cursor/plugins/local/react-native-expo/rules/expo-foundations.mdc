@@ -1,0 +1,14 @@
+---
+description: Expo and React Native starting practices. Use when creating, structuring, upgrading, or changing an Expo or React Native app.
+alwaysApply: false
+---
+
+# Expo foundations
+
+Load `expo-overview` before other Expo skills, then the leaf skill it names.
+
+- New apps use Expo Router and the current SDK. Add Expo packages with `npx expo install`.
+- Apply `expo-project-structure` only when the app has no layout yet. Leave an existing layout in place.
+- Routes stay in `app/` or `src/app/`. Screens, shared components, and server code live outside the routes folder.
+- Match an official `expo/examples` project before inventing a third-party integration.
+- Upgrade with `expo-upgrade`. Do not bump single Expo packages past the SDK.

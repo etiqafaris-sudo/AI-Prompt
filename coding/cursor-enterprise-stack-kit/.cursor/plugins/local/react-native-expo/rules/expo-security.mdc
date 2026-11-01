@@ -1,0 +1,20 @@
+---
+description: Expo and React Native client security. Use when handling auth, tokens, secrets, env vars, deep links, permissions, or updates.
+alwaysApply: false
+---
+
+# Expo security
+
+Load `expo-security-and-data` before writing or reviewing client security.
+
+- Put tokens in `expo-secure-store`. AsyncStorage and plaintext MMKV are not secret stores.
+- `EXPO_PUBLIC_*` values ship inside the app. Public config only.
+- Call backends over HTTPS. Leave TLS verification on.
+- Ask for the minimum permission, in context. Wipe secrets on logout.
+- Add Expo packages with `npx expo install`. Keep EAS Update runtime and signature checks intact.
+
+```tsx
+import * as SecureStore from "expo-secure-store";
+
+await SecureStore.setItemAsync("access_token", token);
+```

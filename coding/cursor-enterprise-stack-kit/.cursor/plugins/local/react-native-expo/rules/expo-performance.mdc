@@ -1,0 +1,14 @@
+---
+description: Expo and React Native performance practices. Use when writing lists, images, animations, startup, bundle size, memory, or render performance.
+alwaysApply: false
+---
+
+# Expo performance
+
+Load `react-native-best-practices` and `vercel-react-native-skills` before optimizing or writing list, image, or animation code.
+
+- Virtualize long lists. Memoize row components and keep row callbacks and styles stable.
+- Use `expo-image`. Give remote images a size. Do not put large images in the JS bundle.
+- Keep expensive work out of render and out of list items. Do not store scroll position in React state.
+- Measure before changing architecture. Use release builds for FPS, TTI, and memory checks.
+- For EAS Observe metrics, load `eas-observe`.

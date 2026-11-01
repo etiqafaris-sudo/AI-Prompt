@@ -1,0 +1,7 @@
+{
+  "name": "react-native-expo",
+  "displayName": "React Native Expo",
+  "version": "1.0.0",
+  "description": "Global Expo and React Native rules for project setup, UI, performance, security, and data governance.",
+  "keywords": ["expo", "react-native", "performance", "security", "ui"]
+}

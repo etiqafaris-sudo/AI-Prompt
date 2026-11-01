@@ -1,0 +1,14 @@
+---
+description: Expo and React Native data governance. Use when storing, caching, logging, or sending personal data, analytics, or crash reports.
+alwaysApply: false
+---
+
+# Expo data governance
+
+Load `expo-security-and-data` and `expo-data-fetching` when data leaves the screen or is stored.
+
+- Name the purpose, store, retention, and deletion path before persisting personal data.
+- Keep personal data out of logs, analytics, crash reports, screenshots, fixtures, and git.
+- Clear SecureStore secrets, session memory, and personal query caches on logout and account deletion.
+- Do not whitelist auth state in an unencrypted persist config.
+- Keep store privacy disclosures aligned with the data the app actually collects.

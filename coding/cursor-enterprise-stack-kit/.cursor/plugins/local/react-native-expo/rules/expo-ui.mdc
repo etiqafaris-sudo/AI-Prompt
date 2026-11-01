@@ -1,0 +1,14 @@
+---
+description: Expo and React Native UI practices. Use when building screens, navigation, theme, native controls, gestures, or animation.
+alwaysApply: false
+---
+
+# Expo UI
+
+Load `expo-native-ui`, `expo-ui`, `expo-router`, and `expo-design-system` for the surface being built. Load `expo-animation` for motion.
+
+- Use semantic colors, safe areas, and native controls. Keep tokens in the theme instead of hardcoded colors, spacing, and fonts.
+- Prefer `@expo/ui` for sheets, pickers, sliders, switches, and menus when the SDK provides them.
+- `@expo/ui` List is a grouped settings list. Virtualize large data sets with FlashList.
+- Navigate with Expo Router native stacks and native tabs.
+- Animate transform and opacity on the UI thread with Reanimated. Do not drive motion from React state.
